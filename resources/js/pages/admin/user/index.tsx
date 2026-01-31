@@ -241,7 +241,6 @@ export default function UsersIndex({ users, filters, flash, roles }: Props) {
 
                                             <td className='p-4 align-middle'>
                                                 <div className='flex items-center gap-2'>
-                                                    {/* <Shield className='h-4 w-4 text-muted-foreground' /> */}
                                                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getRoleBadge(roleName)}`}>
                                                         {roleName ? (roleName.charAt(0).toUpperCase() + roleName.slice(1)) : '—'}
                                                     </span>
