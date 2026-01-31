@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AreaParkirController;
 use App\Http\Controllers\JenisKendaraanController;
 use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\LogAktivitasController;
 use App\Http\Controllers\TarifParkirController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard Utama - Auto redirect ke dashboard sesuai role
     Route::get('/dashboard', function () {
-        return match(Auth::user()->role) {
+        return match (Auth::user()->role) {
             'admin' => redirect()->route('admin.dashboard'),
             'petugas' => redirect()->route('petugas.dashboard'),
             'owner' => redirect()->route('owner.dashboard'),
@@ -30,12 +31,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ========== ADMIN ROUTES ==========
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', fn() => Inertia::render('admin/dashboard'))->name('dashboard');
-        Route::resource('users',UserController::class);
+        Route::resource('users', UserController::class);
         Route::resource('area-parkir', AreaParkirController::class);
         Route::resource('tarif-parkir', TarifParkirController::class);
         Route::resource('jenis-kendaraan', JenisKendaraanController::class);
         Route::resource('kendaraan', KendaraanController::class);
-        // Route::get('/log-aktivitas', fn() => Inertia::render('admin/log-aktivitas/index'))->name('log-aktivitas.index');
+        Route::resource('log-aktivitas', LogAktivitasController::class);
     });
 
     // ========== PETUGAS ROUTES ==========
@@ -53,4 +54,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

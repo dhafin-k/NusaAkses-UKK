@@ -161,7 +161,7 @@ return (
                                     value={data.role}
                                     onValueChange={(value) => setData('role', value)}
                                 >
-                                    <SelectTrigger className='focus:ring-2 focus:ring-primary'>
+                                    <SelectTrigger className='focus:ring-2 focus:ring-primary w-full'>
                                         <SelectValue placeholder='Pilih Role' />
                                     </SelectTrigger>
                                     <SelectContent>

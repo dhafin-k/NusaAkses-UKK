@@ -170,7 +170,7 @@ return (
                                     value={data.role}
                                     onValueChange={(value) => setData('role', value)}
                                 >
-                                    <SelectTrigger className='focus:ring-2 focus:ring-primary'>
+                                    <SelectTrigger className='focus:ring-2 focus:ring-primary w-full'>
                                         <SelectValue placeholder='Pilih Role' />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -234,7 +234,7 @@ return (
                                 <Button
                                     type='submit'
                                     disabled={processing}
-                                    className='bg-primary hover:bg-primary/90 text-white'
+                                    className='bg-primary hover:bg-primary/90 text-white shadow-lg dark:bg-neutral-800 dark:hover:bg-neutral-700'
                                 >
                                     <Save className='h-4 w-4 mr-2' />
                                     {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
