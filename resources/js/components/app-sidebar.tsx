@@ -24,7 +24,8 @@ import {
     Package,
     Truck,
     Bike,
-    Activity
+    Activity,
+    ParkingCircle
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -64,6 +65,7 @@ export function AppSidebar() {
     } else if (role === 'petugas') {
         mainNavItems = [
             { title: 'Dashboard', href: '/petugas/dashboard', icon: LayoutGrid },
+            { title: 'Transaksi', href: '/petugas/transaksi', icon: ParkingCircle },
             // { title: 'Transaksi', href: '/petugas/transaksi', icon: ShoppingCart },
             // { title: 'Buat Transaksi', href: '/petugas/transaksi/create', icon: FileText },
         ];
