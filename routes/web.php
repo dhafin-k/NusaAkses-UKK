@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AreaParkirController;
 use App\Http\Controllers\JenisKendaraanController;
 use App\Http\Controllers\KendaraanController;
@@ -17,6 +18,25 @@ Route::get('/', fn() => Inertia::render('welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ]))->name('home');
 
+// DEBUG ROUTE - HAPUS SETELAH SELESAI
+Route::get('/debug-dashboard', function () {
+    $transaksi = \App\Models\Transaksi::with(['kendaraan', 'areaParkir'])->get();
+    return [
+        'total_transaksi' => $transaksi->count(),
+        'data_sample' => $transaksi->take(3)->map(fn($t) => [
+            'id' => $t->id,
+            'plat_nomor' => $t->kendaraan?->plat_nomor,
+            'waktu_masuk' => $t->waktu_masuk,
+            'status' => $t->status,
+            'biaya' => $t->biaya_total,
+        ]),
+        'date_range' => [
+            'oldest' => \App\Models\Transaksi::whereNotNull('waktu_masuk')->min('waktu_masuk'),
+            'newest' => \App\Models\Transaksi::whereNotNull('waktu_masuk')->max('waktu_masuk'),
+        ]
+    ];
+});
+
 // Route untuk semua user yang sudah login
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -32,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // ========== ADMIN ROUTES ==========
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', fn() => Inertia::render('admin/dashboard'))->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('users', UserController::class);
         Route::resource('area-parkir', AreaParkirController::class);
         Route::resource('tarif-parkir', TarifParkirController::class);
