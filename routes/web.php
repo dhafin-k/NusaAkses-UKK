@@ -6,6 +6,7 @@ use App\Http\Controllers\AreaParkirController;
 use App\Http\Controllers\JenisKendaraanController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\LogAktivitasController;
+use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\TarifParkirController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PetugasDashboardController;
@@ -70,7 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // ========== OWNER ROUTES ==========
     Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
-        Route::get('/dashboard', fn() => Inertia::render('owner/dashboard'))->name('dashboard');
+        Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
         // Route::get('/rekap-transaksi', fn() => Inertia::render('owner/rekap-transaksi/index'))->name('rekap-transaksi.index');
     });
 });
