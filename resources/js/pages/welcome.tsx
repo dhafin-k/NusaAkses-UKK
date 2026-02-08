@@ -66,7 +66,7 @@ export default function LandingPage() {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-7xl md:text-9xl font-bold mb-6 bg-gradient-to-br from-white via-blue-100 to-blue-400 bg-clip-text text-transparent"
           >
-            Nangkring
+            NusaAkses
           </motion.h1>
 
           <motion.p
@@ -93,24 +93,24 @@ export default function LandingPage() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex gap-4 flex-wrap justify-center"
           >
-            <Link href="/register">
+            <Link href="/login">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-10 py-7 text-lg rounded-full shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/70 transition-all duration-300 group"
+                className="bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-10 py-7 text-lg rounded-full shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/70 transition-all duration-300 group"
               >
                 Mulai Gratis
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link href="/login">
+            {/* <Link href="/login">
               <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-slate-700 text-slate-300 hover:bg-slate-800 hover:border-slate-600 px-10 py-7 text-lg rounded-full backdrop-blur-sm transition-all duration-300"
+                className="border-2 border-slate-700 text-slate-700 hover:bg-slate-500 hover:border-slate-600 px-10 py-7 text-lg rounded-full backdrop-blur-sm transition-all duration-300"
               >
                 Login
               </Button>
-            </Link>
+            </Link> */}
           </motion.div>
 
           {/* Trust Badges */}
@@ -280,13 +280,13 @@ export default function LandingPage() {
             </div>
 
             <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Siap untuk Nangkring?
+              Siap untuk NusaAkses?
             </h2>
             <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto">
-              Bergabunglah dengan ratusan pengelola parkir yang sudah mempercayai Nangkring untuk bisnis mereka
+              Bergabunglah dengan ratusan pengelola parkir yang sudah mempercayai NusaAkses untuk bisnis mereka
             </p>
 
-            <Link href="/register">
+            <Link href="/login">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-12 py-8 text-xl rounded-full shadow-2xl shadow-blue-500/50 hover:shadow-cyan-500/50 transition-all duration-300 group"
@@ -319,10 +319,10 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-              Nangkring
+              NusaAkses
             </h3>
             <p className="text-slate-500 text-sm">
-              © 2026 Nangkring. Dibuat dengan ❤️ untuk kemudahan parkir Indonesia.
+              © 2026 NusaAkses. Sistem parkir digital untuk Indonesia.
             </p>
           </div>
           <div className="flex gap-6 text-sm text-slate-500">

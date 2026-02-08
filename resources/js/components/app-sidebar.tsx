@@ -26,7 +26,8 @@ import {
     Bike,
     Activity,
     ParkingCircle,
-    BarChart3
+    BarChart3,
+    BarChart2
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -67,13 +68,19 @@ export function AppSidebar() {
         mainNavItems = [
             { title: 'Dashboard', href: '/petugas/dashboard', icon: LayoutGrid },
             { title: 'Transaksi', href: '/petugas/transaksi', icon: ParkingCircle },
-            // { title: 'Transaksi', href: '/petugas/transaksi', icon: ShoppingCart },
-            // { title: 'Buat Transaksi', href: '/petugas/transaksi/create', icon: FileText },
         ];
     } else if (role === 'owner') {
         mainNavItems = [
             { title: 'Dashboard', href: '/owner/dashboard', icon: LayoutGrid },
-            { title: 'Rekap Transaksi', href: '/owner/rekap-transaksi', icon: BarChart3 },
+            {
+                title: 'Rekap Transaksi',
+                href: '#',
+                icon: BarChart3,
+                items: [
+                    { title: 'Bulanan', href: '/owner/rekap-transaksi', icon: BarChart3 },
+                    { title: 'Tahunan', href: '/owner/rekap-transaksi/tahun', icon: BarChart2 },
+                ]
+            },
         ];
     } else {
         mainNavItems = [
