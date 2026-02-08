@@ -10,6 +10,7 @@ use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\TarifParkirController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PetugasDashboardController;
+use App\Http\Controllers\RekapTransaksiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,25 +19,6 @@ use Laravel\Fortify\Features;
 Route::get('/', fn() => Inertia::render('welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ]))->name('home');
-
-// DEBUG ROUTE - HAPUS SETELAH SELESAI
-Route::get('/debug-dashboard', function () {
-    $transaksi = \App\Models\Transaksi::with(['kendaraan', 'areaParkir'])->get();
-    return [
-        'total_transaksi' => $transaksi->count(),
-        'data_sample' => $transaksi->take(3)->map(fn($t) => [
-            'id' => $t->id,
-            'plat_nomor' => $t->kendaraan?->plat_nomor,
-            'waktu_masuk' => $t->waktu_masuk,
-            'status' => $t->status,
-            'biaya' => $t->biaya_total,
-        ]),
-        'date_range' => [
-            'oldest' => \App\Models\Transaksi::whereNotNull('waktu_masuk')->min('waktu_masuk'),
-            'newest' => \App\Models\Transaksi::whereNotNull('waktu_masuk')->max('waktu_masuk'),
-        ]
-    ];
-});
 
 // Route untuk semua user yang sudah login
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -67,12 +49,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
         Route::resource('transaksi', TransaksiController::class);
         Route::get('/transaksi/{id}/cetak', [TransaksiController::class, 'cetak'])->name('transaksi.cetak');
+        Route::get('/transaksi/{id}/struk-masuk', [TransaksiController::class, 'cetakStrokMasuk'])->name('transaksi.struk-masuk');
     });
 
     // ========== OWNER ROUTES ==========
     Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
         Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
-        // Route::get('/rekap-transaksi', fn() => Inertia::render('owner/rekap-transaksi/index'))->name('rekap-transaksi.index');
+        Route::get('/rekap-transaksi', [RekapTransaksiController::class, 'index'])->name('rekap.index');
+        Route::get('/rekap-transaksi/tahun', [RekapTransaksiController::class, 'tahun'])->name('rekap.tahun');
+        Route::get('/rekap-transaksi/cetak', [RekapTransaksiController::class, 'cetakRekapTransaksi'])
+        ->name('rekap.cetak');
+        Route::get('/rekap-transaksi-tahun/cetak', [RekapTransaksiController::class, 'cetakRekapTahun'])
+        ->name('rekap.cetak-tahun');
     });
 });
 

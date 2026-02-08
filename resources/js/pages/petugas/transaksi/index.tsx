@@ -378,7 +378,6 @@ export default function TransaksiIndex({ transaksi, filters, flash }: Props) {
                                         <td className='p-4 align-middle font-medium'>
                                             {item.biaya_total ? (
                                                 <div className='flex items-center gap-2'>
-                                                    <DollarSign className='h-4 w-4 text-muted-foreground' />
                                                     <span className='font-mono'>Rp {formatRupiah(item.biaya_total)}</span>
                                                 </div>
                                             ) : (
@@ -405,15 +404,26 @@ export default function TransaksiIndex({ transaksi, filters, flash }: Props) {
                                         <td className='p-4 align-middle'>
                                             <div className='flex justify-center gap-2'>
                                                 {item.status === 'masuk' && (
-                                                    <Button
-                                                        size='sm'
-                                                        variant='outline'
-                                                        onClick={() => setCheckoutId(item.id)}
-                                                        className='bg-green-50 hover:bg-green-100 text-green-700 border-green-200 h-8 px-2 text-xs'
-                                                    >
-                                                        <LogOut className='h-3.5 w-3.5 mr-1' />
-                                                        Checkout
-                                                    </Button>
+                                                    <>
+                                                        <Button
+                                                            size='sm'
+                                                            variant='outline'
+                                                            onClick={() => window.open(`/petugas/transaksi/${item.id}/struk-masuk`, '_blank')}
+                                                            className='bg-yellow-50 hover:bg-yellow-100 text-yellow-500 border-yellow-200 h-8 px-2 text-xs'
+                                                        >
+                                                            <Printer className='h-3.5 w-3.5 mr-1' />
+                                                            Struk Parkir
+                                                        </Button>
+                                                        <Button
+                                                            size='sm'
+                                                            variant='outline'
+                                                            onClick={() => setCheckoutId(item.id)}
+                                                            className='bg-green-50 hover:bg-green-100 text-green-700 border-green-200 h-8 px-2 text-xs'
+                                                        >
+                                                            <LogOut className='h-3.5 w-3.5 mr-1' />
+                                                            Checkout
+                                                        </Button>
+                                                    </>
                                                 )}
                                                 {item.status === 'keluar' && (
                                                     <Button
@@ -423,7 +433,7 @@ export default function TransaksiIndex({ transaksi, filters, flash }: Props) {
                                                         className='bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-8 px-2 text-xs'
                                                     >
                                                         <Printer className='h-3.5 w-3.5 mr-1' />
-                                                        Cetak
+                                                        Bukti Pembayaran
                                                     </Button>
                                                 )}
                                                 <Button

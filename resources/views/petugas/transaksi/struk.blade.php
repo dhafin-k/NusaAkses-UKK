@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Nangkring #{{ $transaksi->id }}</title>
+    <title>NusaAkses #{{ $transaksi->id }}</title>
     <style>
         * {
             margin: 0;

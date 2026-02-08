@@ -6,11 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ArrowLeft, Save, CheckCircle2, XCircle, Car, MapPin, DollarSign, Clock, AlertCircle } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
+import { ArrowLeft, Save, CheckCircle2, XCircle, Car, MapPin, DollarSign, Clock, AlertCircle, Check, ChevronsUpDown } from 'lucide-react'
 import { type BreadcrumbItem } from '@/types'
 import { useForm } from '@inertiajs/react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 interface AreaParkir {
     id: number;
@@ -75,6 +78,8 @@ export default function TransaksiCreate({ areaParkir, kendaraan, tarifParkir, er
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
     const [selectedKendaraan, setSelectedKendaraan] = useState<Kendaraan | null>(null);
     const [selectedTarif, setSelectedTarif] = useState<TarifParkir | null>(null);
+    const [openKendaraanCombobox, setOpenKendaraanCombobox] = useState(false);
+    const [searchKendaraan, setSearchKendaraan] = useState('');
 
     const { data, setData, post, processing } = useForm({
         area_parkir_id: '',
@@ -223,31 +228,68 @@ export default function TransaksiCreate({ areaParkir, kendaraan, tarifParkir, er
                                         <Car className='h-4 w-4 inline mr-2' />
                                         Kendaraan <span className='text-destructive'>*</span>
                                     </Label>
-                                    <Select
-                                        value={data.kendaraan_id}
-                                        onValueChange={(value) => setData('kendaraan_id', value)}
-                                    >
-                                        <SelectTrigger className='focus:ring-2 focus:ring-primary w-full'>
-                                            <SelectValue placeholder='Pilih Kendaraan' />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {kendaraan.map((kend) => (
-                                                <SelectItem key={kend.id} value={kend.id.toString()}>
-                                                    <div className='flex flex-col py-1'>
-                                                        <div className='flex items-center gap-2'>
-                                                            <span className='font-mono font-bold'>{kend.plat_nomor}</span>
-                                                            <Badge variant="outline" className='text-xs'>
-                                                                {kend.jenis?.nama_jenis_kendaraan || '-'}
-                                                            </Badge>
-                                                        </div>
-                                                        <span className='text-xs text-muted-foreground'>
-                                                            {kend.pemilik} • {kend.warna}
-                                                        </span>
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <Popover open={openKendaraanCombobox} onOpenChange={setOpenKendaraanCombobox}>
+                                        <PopoverTrigger asChild className='w-full'>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={openKendaraanCombobox}
+                                                className="w-full justify-between focus:ring-2 focus:ring-primary"
+                                            >
+                                                {selectedKendaraan
+                                                    ? `${selectedKendaraan.plat_nomor}`
+                                                    : "Pilih Kendaraan..."}
+                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full p-0 max-h-96" align="start" side="bottom">
+                                            <Command shouldFilter={false}>
+                                                <CommandInput
+                                                    placeholder="Cari plat nomor..."
+                                                    value={searchKendaraan}
+                                                    onValueChange={setSearchKendaraan}
+                                                />
+                                                <CommandEmpty>Tidak ada kendaraan yang ditemukan.</CommandEmpty>
+                                                <CommandList className="max-h-80">
+                                                    <CommandGroup>
+                                                        {kendaraan
+                                                            .filter((kend) => {
+                                                                if (!searchKendaraan) return true;
+                                                                return kend.plat_nomor.toLowerCase().includes(searchKendaraan.toLowerCase());
+                                                            })
+                                                            .map((kend) => (
+                                                                <CommandItem
+                                                                    key={kend.id}
+                                                                    value={kend.id.toString()}
+                                                                    onSelect={() => {
+                                                                        setData('kendaraan_id', kend.id.toString());
+                                                                        setSelectedKendaraan(kend);
+                                                                        setOpenKendaraanCombobox(false);
+                                                                        setSearchKendaraan('');
+                                                                    }}
+                                                                    className="cursor-pointer py-3"
+                                                                >
+                                                                    <Check
+                                                                        className={cn(
+                                                                            "mr-2 h-4 w-4",
+                                                                            data.kendaraan_id === kend.id.toString()
+                                                                                ? "opacity-100"
+                                                                                : "opacity-0"
+                                                                        )}
+                                                                    />
+                                                                    <div className='flex items-center gap-2'>
+                                                                        <span className='font-mono font-bold text-sm md:text-base'>{kend.plat_nomor}</span>
+                                                                        <Badge variant="outline" className='text-xs'>
+                                                                            {kend.jenis?.nama_jenis_kendaraan || '-'}
+                                                                        </Badge>
+                                                                    </div>
+                                                                </CommandItem>
+                                                            ))}
+                                                    </CommandGroup>
+                                                </CommandList>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
                                     {errors?.kendaraan_id && (
                                         <p className='text-destructive text-sm flex items-center gap-1'>
                                             <AlertCircle className='h-3 w-3' />

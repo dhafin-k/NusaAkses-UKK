@@ -465,4 +465,42 @@ class TransaksiController extends Controller
                 ->with('error', 'Gagal mencetak struk: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Cetak struk masuk (bukti parkir)
+     */
+    public function cetakStrokMasuk(string $id)
+    {
+        try {
+            $transaksi = Transaksi::with([
+                'areaParkir',
+                'kendaraan.jenis',
+                'tarifParkir.jenisKendaraan',
+                'user'
+            ])->findOrFail($id);
+
+            // Validasi transaksi masih status masuk
+            if ($transaksi->status !== 'masuk') {
+                return redirect()->route('petugas.transaksi.index')
+                    ->with('error', 'Hanya transaksi yang masih masuk yang bisa dicetak struk parkir.');
+            }
+
+            // Generate PDF
+            $pdf = Pdf::loadView('petugas.transaksi.struk-masuk', [
+                'transaksi' => $transaksi,
+            ])->setPaper([0, 0, 226, 350], 'portrait');
+
+            $filename = 'Struk_Masuk_' . $transaksi->kendaraan->plat_nomor . '_' . now()->format('dmY_His') . '.pdf';
+
+            return $pdf->stream($filename);
+
+        } catch (\Exception $e) {
+            Log::error('Cetak Struk Masuk Error:', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('petugas.transaksi.index')
+                ->with('error', 'Gagal mencetak struk parkir: ' . $e->getMessage());
+        }
+    }
 }
